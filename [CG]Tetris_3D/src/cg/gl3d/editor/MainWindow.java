@@ -1,4 +1,4 @@
-package cg.gl2d.editor;
+package cg.gl3d.editor;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
