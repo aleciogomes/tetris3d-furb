@@ -17,7 +17,7 @@ public class MainWindow extends JFrame {
 	 * Cria a janela com a barra de ferramentas e a área de edição
 	 */
 	public MainWindow() {
-		super("Tétris 3D");   
+		super("Tetris 3D");   
 		setSize(800, 600);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -32,7 +32,7 @@ public class MainWindow extends JFrame {
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new BorderLayout());
 //		contentPane.add(createToolBar(), BorderLayout.NORTH);
-//		contentPane.add(createEditor(), BorderLayout.CENTER);
+		contentPane.add(new TetrisRenderer(), BorderLayout.CENTER);
 	}
 	
 	/**
