@@ -20,6 +20,7 @@ public class MatrizControle {
 		matriz[row][column] = busy ? 1 : 0;
 	}
 	
+	// teste
 	public boolean isBusy(int row, int column){
 		return matriz[row][column] == 1;
 	}
