@@ -6,59 +6,65 @@ import com.sun.opengl.util.GLUT;
 
 /**
  * 
- * @author Beto
- * since: 09/06/2010
+ * @author Beto since: 09/06/2010
  * 
- * Classe responsável por renderizar um cubo na tela. 
- *
+ *         Classe responsável por renderizar um cubo na tela.
+ * 
  */
-public class Cube implements Object3D
-{
+public class Cube implements Object3D {
 	private GLUT glut;
-	
+
 	/**
-	 *  Tamanho padrão do cubo
+	 * Tamanho padrão do cubo
 	 */
 	private final double sizeCube;
-	
+
 	/**
 	 * Posição atual do cubo na matriz.
 	 */
 	private int posAtual;
-	
+
 	/**
 	 * Construtor padrão
 	 */
-	public Cube()
-	{
+	public Cube() {
 		this.glut = new GLUT();
 		this.sizeCube = 0.5d;
 	}
-	
+
 	/**
 	 * 
-	 * @param gl: objeto da classe CL, responsável pelo desenho
-	 * @param translateX: posição no eixo x que será transladado
-	 * @param translateY: posição no eixo y que será transladado
-	 * @param translateZ: posição no eixo z que será transladado
+	 * @param gl
+	 *            : objeto da classe CL, responsável pelo desenho
+	 * @param translateX
+	 *            : posição no eixo x que será transladado
+	 * @param translateY
+	 *            : posição no eixo y que será transladado
+	 * @param translateZ
+	 *            : posição no eixo z que será transladado
 	 */
-	public void draw(GL gl, int translateX, int translateY, int translateZ)
-	{
+	public void draw(GL gl, int translateX, int translateY, int translateZ) {
 		draw(gl, translateX, translateY, translateZ, 255, 0, 0);
 	}
-	
+
 	/**
 	 * 
-	 * @param gl: objeto da classe CL, responsável pelo desenho
-	 * @param translateX: posição no eixo x que será transladado
-	 * @param translateY: posição no eixo y que será transladado
-	 * @param translateZ: posição no eixo z que será transladado
-	 * @param red: escala vermelho da cor
-	 * @param green: escala verde da cor
-	 * @param blue: escala azul da cor
+	 * @param gl
+	 *            : objeto da classe CL, responsável pelo desenho
+	 * @param translateX
+	 *            : posição no eixo x que será transladado
+	 * @param translateY
+	 *            : posição no eixo y que será transladado
+	 * @param translateZ
+	 *            : posição no eixo z que será transladado
+	 * @param red
+	 *            : escala vermelho da cor
+	 * @param green
+	 *            : escala verde da cor
+	 * @param blue
+	 *            : escala azul da cor
 	 */
-	public void draw(GL gl, int translateX, int translateY, int translateZ, int red, int green, int blue)
-	{
+	public void draw(GL gl, int translateX, int translateY, int translateZ, int red, int green, int blue) {
 		gl.glColor3f(red, green, blue);
 		gl.glPushMatrix();
 		gl.glTranslated(translateX * sizeCube, translateY * sizeCube, translateZ * sizeCube);

@@ -16,6 +16,10 @@ import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
 import javax.swing.JPanel;
 
+import cg.gl3d.object.Cube;
+import cg.gl3d.object.ElementoTetris;
+import cg.gl3d.object.TipoElemento;
+
 @SuppressWarnings("serial")
 public class TetrisRenderer extends JPanel implements GLEventListener, KeyListener, MouseListener, MouseMotionListener {
 
@@ -69,6 +73,22 @@ public class TetrisRenderer extends JPanel implements GLEventListener, KeyListen
 		glDrawable.setGL(new DebugGL(gl));
 
 		gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+		
+//		ElementoTetris e = new ElementoTetris();
+//		e.create(TipoElemento.te);
+//		e.print();
+//		System.out.println("");
+//		e.rotate();
+//		e.print();
+//		System.out.println("");
+//		e.rotate();
+//		e.print();
+//		System.out.println("");
+//		e.rotate();
+//		e.print();
+//		System.out.println("");
+//		e.rotate();
+//		e.print();
 	}
 
 	@Override
@@ -95,6 +115,10 @@ public class TetrisRenderer extends JPanel implements GLEventListener, KeyListen
 		gl.glVertex3d(0.0, 0.0, 0.0);
 		gl.glVertex3d(0.0, 0.0, 2.0);
 		gl.glEnd();
+		
+		ElementoTetris e = new ElementoTetris();
+		e.create(TipoElemento.te);
+		e.draw(gl);
 
 		System.out.println("Angulo " + angulo);
 		TetrisPoint p = Utils.pointFromAngulo(angulo, raio);
@@ -117,7 +141,7 @@ public class TetrisRenderer extends JPanel implements GLEventListener, KeyListen
 	public void reshape(GLAutoDrawable arg0, int arg1, int arg2, int width, int height) {
 		gl.glMatrixMode(GL.GL_PROJECTION);
 		gl.glLoadIdentity();
-		gl.glFrustum(-2.0f, 2.0f, -2.0, 2.0, 5.0f, 60.0f);
+		gl.glFrustum(-1.0f, 1.0f, -2.0, 2.0, 5.0f, 60.0f);
 		gl.glMatrixMode(GL.GL_MODELVIEW);
 	}
 
