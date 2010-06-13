@@ -1,6 +1,7 @@
 package cg.gl3d.object;
 
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.media.opengl.GL;
 
@@ -10,11 +11,13 @@ public class ElementoTetris {
 	private int matriz[][];
 	private int transladeX;
 	private int transladeY;
+	private List<Cube> cubes;
 
 	public ElementoTetris() {
 		transladeX = 0;
 		transladeY = 0;
 		matriz = new int[this.n][this.n];
+		cubes = new ArrayList<Cube>();
 
 		clear();
 	}
@@ -83,7 +86,13 @@ public class ElementoTetris {
 			matriz[0][1] = 1;
 			matriz[0][2] = 1;
 			matriz[1][1] = 1;
-			matriz[2][1] = 1;
+			
+			for (int i = 0; i < 4; i++) {
+				Cube c = new Cube();
+				c.setColor(0, 1, 0);
+				cubes.add(c);
+			}
+			
 			break;
 		}
 		}
@@ -101,11 +110,12 @@ public class ElementoTetris {
 	}
 
 	public void draw(GL gl) {
-		Random r = new Random();
+		int cubo = 0;
 		for (int i = 0; i < this.n; i++) {
 			for (int j = 0; j < this.n; j++) {
 				if (matriz[i][j] == 1) {
-					new Cube().draw(gl, (i - 1) * transladeX, (j - 1) * transladeY, 0, r.nextInt(255), r.nextInt(255), r.nextInt(255));
+					cubes.get(cubo++).draw(gl, j + transladeX, (i * -1) + transladeY, 0);
+					System.out.println("Desenhei um cubo");
 				}
 			}
 		}
@@ -119,4 +129,14 @@ public class ElementoTetris {
 			System.out.println("");
 		}
 	}
+
+	public void setTransladeX(int transladeX) {
+		this.transladeX = transladeX;
+	}
+
+	public void setTransladeY(int transladeY) {
+		this.transladeY = transladeY;
+	}
+	
+	
 }

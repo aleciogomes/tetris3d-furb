@@ -16,7 +16,6 @@ import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
 import javax.swing.JPanel;
 
-import cg.gl3d.object.Cube;
 import cg.gl3d.object.ElementoTetris;
 import cg.gl3d.object.TipoElemento;
 
@@ -33,12 +32,12 @@ public class TetrisRenderer extends JPanel implements GLEventListener, KeyListen
 	private int dragX = 0;
 
 	private double raio = 20.0;
-	private double angulo = 45.0;
+	private double angulo = 90.0;
+	ElementoTetris e = new ElementoTetris();
 
 	public TetrisRenderer() {
 
 		cameraEye = new TetrisPoint();
-		cameraEye.y = 2;
 		cameraEye.z = raio;
 
 		/*
@@ -73,6 +72,10 @@ public class TetrisRenderer extends JPanel implements GLEventListener, KeyListen
 		glDrawable.setGL(new DebugGL(gl));
 
 		gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+		
+		e.setTransladeX(2);
+		e.setTransladeY(1);
+		e.create(TipoElemento.te);
 		
 //		ElementoTetris e = new ElementoTetris();
 //		e.create(TipoElemento.te);
@@ -116,8 +119,7 @@ public class TetrisRenderer extends JPanel implements GLEventListener, KeyListen
 		gl.glVertex3d(0.0, 0.0, 2.0);
 		gl.glEnd();
 		
-		ElementoTetris e = new ElementoTetris();
-		e.create(TipoElemento.te);
+		
 		e.draw(gl);
 
 		System.out.println("Angulo " + angulo);
@@ -141,7 +143,7 @@ public class TetrisRenderer extends JPanel implements GLEventListener, KeyListen
 	public void reshape(GLAutoDrawable arg0, int arg1, int arg2, int width, int height) {
 		gl.glMatrixMode(GL.GL_PROJECTION);
 		gl.glLoadIdentity();
-		gl.glFrustum(-1.0f, 1.0f, -2.0, 2.0, 5.0f, 60.0f);
+		gl.glFrustum(-1.0f, 1.0f, -1.0, 1.0, 5.0f, 60.0f);
 		gl.glMatrixMode(GL.GL_MODELVIEW);
 	}
 
@@ -164,9 +166,12 @@ public class TetrisRenderer extends JPanel implements GLEventListener, KeyListen
 			angulo -= 1.0;
 			break;
 		}
+		case KeyEvent.VK_R:{
+			this.e.rotate();
+		}
 		}
 
-		if (anguloAnterior != angulo && glDrawable != null) {
+		if (anguloAnterior != angulo && glDrawable != null || e.getKeyCode() == KeyEvent.VK_R) {
 			glDrawable.display();
 		}
 	}

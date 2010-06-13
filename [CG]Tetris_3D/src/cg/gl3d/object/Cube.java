@@ -23,6 +23,10 @@ public class Cube implements Object3D {
 	 * Posição atual do cubo na matriz.
 	 */
 	private int posAtual;
+	
+	private int r;
+	private int g;
+	private int b;
 
 	/**
 	 * Construtor padrão
@@ -30,6 +34,12 @@ public class Cube implements Object3D {
 	public Cube() {
 		this.glut = new GLUT();
 		this.sizeCube = 0.5d;
+	}
+	
+	public void setColor(int r, int g, int b){
+		this.r = r;
+		this.g = g;
+		this.b = b;
 	}
 
 	/**
@@ -44,7 +54,7 @@ public class Cube implements Object3D {
 	 *            : posição no eixo z que será transladado
 	 */
 	public void draw(GL gl, int translateX, int translateY, int translateZ) {
-		draw(gl, translateX, translateY, translateZ, 255, 0, 0);
+		draw(gl, translateX, translateY, translateZ, r, g, b);
 	}
 
 	/**
@@ -65,7 +75,7 @@ public class Cube implements Object3D {
 	 *            : escala azul da cor
 	 */
 	public void draw(GL gl, int translateX, int translateY, int translateZ, int red, int green, int blue) {
-		gl.glColor3f(red, green, blue);
+		gl.glColor3b((byte)red, (byte)green, (byte)blue);
 		gl.glPushMatrix();
 		gl.glTranslated(translateX * sizeCube, translateY * sizeCube, translateZ * sizeCube);
 		gl.glScaled(sizeCube, sizeCube, sizeCube);
