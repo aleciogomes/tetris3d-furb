@@ -9,12 +9,10 @@ public class ElementoVivo extends Thread {
 	private ElementoTetris elemento;
 	private MatrizControle matrizControle;
 	private ElementMoved listener;
-	private long time;
 
 	public ElementoVivo(ElementMoved listener, MatrizControle matrizControle) {
 		this.elemento = null;
 		this.matrizControle = matrizControle;
-		this.time = 0;
 		this.listener = listener;
 	}
 
@@ -28,13 +26,14 @@ public class ElementoVivo extends Thread {
 
 	@Override
 	public void run() {
+		long time = 0;
 		while (true) {
-			if (this.time == 0) {
-				this.time = System.currentTimeMillis();
+			if (time == 0) {
+				time = System.currentTimeMillis();
 			}
 
 			long now = System.currentTimeMillis();
-			if (now - this.time > 1000) {
+			if (now - time > 1000) {
 				// isto n‹o Ž correto. O certo Ž se basear na matriz de controle
 				if (elemento.getTransladeY() != 1) {
 					elemento.setTransladeY(elemento.getTransladeY() - 1);
