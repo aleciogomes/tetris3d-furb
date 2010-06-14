@@ -24,9 +24,9 @@ public class Cube implements Object3D {
 	 */
 	private int posAtual;
 	
-	private int r;
-	private int g;
-	private int b;
+	private float r;
+	private float g;
+	private float b;
 
 	/**
 	 * Construtor padrão
@@ -36,7 +36,7 @@ public class Cube implements Object3D {
 		this.sizeCube = 0.5d;
 	}
 	
-	public void setColor(int r, int g, int b){
+	public void setColor(float r, float g, float b){
 		this.r = r;
 		this.g = g;
 		this.b = b;
@@ -74,8 +74,8 @@ public class Cube implements Object3D {
 	 * @param blue
 	 *            : escala azul da cor
 	 */
-	public void draw(GL gl, int translateX, int translateY, int translateZ, int red, int green, int blue) {
-		gl.glColor3b((byte)red, (byte)green, (byte)blue);
+	public void draw(GL gl, int translateX, int translateY, int translateZ, float red, float green, float blue) {
+		gl.glColor3f(red, green, blue);
 		gl.glPushMatrix();
 		gl.glTranslated(translateX * sizeCube, translateY * sizeCube, translateZ * sizeCube);
 		gl.glScaled(sizeCube, sizeCube, sizeCube);

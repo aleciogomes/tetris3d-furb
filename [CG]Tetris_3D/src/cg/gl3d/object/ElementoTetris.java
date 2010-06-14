@@ -79,6 +79,11 @@ public class ElementoTetris {
 	public void create(TipoElemento tipo) {
 
 		clear();
+		
+		int qtdCubos = 0;
+		float r = 0;
+		float g = 0;
+		float b = 0;
 
 		switch (tipo) {
 		case te: {
@@ -87,14 +92,39 @@ public class ElementoTetris {
 			matriz[0][2] = 1;
 			matriz[1][1] = 1;
 			
-			for (int i = 0; i < 4; i++) {
-				Cube c = new Cube();
-				c.setColor(0, 1, 0);
-				cubes.add(c);
-			}
+			g = 1;
+			qtdCubos = 4;
 			
 			break;
 		}
+		case barra:{
+			matriz[0][0] = 1;
+			matriz[1][0] = 1;
+			matriz[2][0] = 1;
+			matriz[3][0] = 1;
+			
+			r = 1;
+			qtdCubos = 4;
+			
+			break;
+		}
+		case quad:{
+			matriz[0][0] = 1;
+			matriz[0][1] = 1;
+			matriz[1][0] = 1;
+			matriz[1][1] = 1;
+			
+			b = 1;
+			qtdCubos = 4;
+			
+			break;
+		}
+		}
+		
+		for (int i = 0; i < qtdCubos; i++) {
+			Cube c = new Cube();
+			c.setColor(r, g, b);
+			cubes.add(c);
 		}
 	}
 
@@ -115,7 +145,6 @@ public class ElementoTetris {
 			for (int j = 0; j < this.n; j++) {
 				if (matriz[i][j] == 1) {
 					cubes.get(cubo++).draw(gl, j + transladeX, (i * -1) + transladeY, 0);
-					System.out.println("Desenhei um cubo");
 				}
 			}
 		}
@@ -133,9 +162,17 @@ public class ElementoTetris {
 	public void setTransladeX(int transladeX) {
 		this.transladeX = transladeX;
 	}
+	
+	public int getTransladeX(){
+		return transladeX;
+	}
 
 	public void setTransladeY(int transladeY) {
 		this.transladeY = transladeY;
+	}
+	
+	public int getTransladeY(){
+		return transladeY;
 	}
 	
 	
