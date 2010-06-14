@@ -75,10 +75,12 @@ public class Cube implements Object3D {
 	 *            : escala azul da cor
 	 */
 	public void draw(GL gl, int translateX, int translateY, int translateZ, float red, float green, float blue) {
-		gl.glColor3f(red, green, blue);
 		gl.glPushMatrix();
 		gl.glTranslated(translateX * sizeCube, translateY * sizeCube, translateZ * sizeCube);
 		gl.glScaled(sizeCube, sizeCube, sizeCube);
+		gl.glColor3f(0, 0, 0);
+		glut.glutWireCube(1.1f); //"borda" do cube
+		gl.glColor3f(red, green, blue);
 		glut.glutSolidCube(1.0f);
 		gl.glPopMatrix();
 		gl.glFlush();
