@@ -6,8 +6,11 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.media.opengl.DebugGL;
 import javax.media.opengl.GL;
@@ -18,14 +21,15 @@ import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
 import javax.swing.JPanel;
 
-import cg.gl3d.controle.ElementMoved;
 import cg.gl3d.controle.ElementoVivo;
+import cg.gl3d.controle.LogicaTetris;
 import cg.gl3d.controle.MatrizControle;
+import cg.gl3d.object.Cube;
 import cg.gl3d.object.ElementoTetris;
 import cg.gl3d.object.TipoElemento;
 
 @SuppressWarnings("serial")
-public class TetrisRenderer extends JPanel implements GLEventListener, KeyListener, MouseListener, MouseMotionListener, ElementMoved {
+public class TetrisRenderer extends JPanel implements GLEventListener, KeyListener, MouseListener, MouseMotionListener, LogicaTetris, MouseWheelListener {
 
 	private GLCanvas canvas;
 	private GLCapabilities capabilities;
@@ -41,7 +45,7 @@ public class TetrisRenderer extends JPanel implements GLEventListener, KeyListen
 	private double raio = 17.0;
 	private double angulo = 90.0;
 	private List<ElementoTetris> elementos;
-	
+
 	private ElementoVivo threadAnimacao;
 	private MatrizControle matrizControle;
 
@@ -52,7 +56,7 @@ public class TetrisRenderer extends JPanel implements GLEventListener, KeyListen
 		cameraEye = new TetrisPoint();
 		cameraEye.y = 4.0;
 		cameraEye.z = raio;
-		
+
 		elementos = new ArrayList<ElementoTetris>();
 
 		/*
@@ -74,6 +78,7 @@ public class TetrisRenderer extends JPanel implements GLEventListener, KeyListen
 		canvas.addKeyListener(this);
 		canvas.addMouseListener(this);
 		canvas.addMouseMotionListener(this);
+		canvas.addMouseWheelListener(this);
 
 		setLayout(new BorderLayout());
 		add(canvas, BorderLayout.CENTER);
@@ -85,23 +90,95 @@ public class TetrisRenderer extends JPanel implements GLEventListener, KeyListen
 		gl = glDrawable.getGL();
 		glu = new GLU();
 		glDrawable.setGL(new DebugGL(gl));
+		gl.glEnable(GL.GL_DEPTH_TEST);
 
 		gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
 		ElementoTetris e = new ElementoTetris();
 		e.setTransladeX(transX);
 		e.setTransladeY(transY);
-		e.create(TipoElemento.te);
+		e.create(TipoElemento.raio);
 		elementos.add(e);
 		
+		Cube c = new Cube();
+		c.setColor(0, 1, 0);
+		matrizControle.setCube(2, 5, c);
+
 		threadAnimacao.setElemento(e);
 		threadAnimacao.start();
 	}
 
 	@Override
 	public void display(GLAutoDrawable arg0) {
-		gl.glClear(GL.GL_COLOR_BUFFER_BIT);
+		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 
+		drawXYZ();
+
+		gl.glLineWidth(2.0f);
+		drawBox();
+		gl.glLineWidth(1.0f);
+
+//		gl.glColor3f(0.8f, 0.8f, 0.8f);
+//		double variacao = 0.25;
+//		for (int i = 0; i < 20; i++) {
+//			gl.glBegin(GL.GL_LINES);
+//			gl.glVertex3d(-2.75, variacao, (angulo > 180 && angulo < 360) ? -0.25 : 0.25);
+//			gl.glVertex3d(3.25, variacao, (angulo > 180 && angulo < 360) ? -0.25 : 0.25);
+//			gl.glEnd();
+//			variacao += 0.5;
+//		}
+//		
+//		variacao = -2.75;
+//		for (int i = 0; i < 12; i++) {
+//			gl.glBegin(GL.GL_LINES);
+//			gl.glVertex3d(variacao, -0.25, (angulo > 180 && angulo < 360) ? -0.25 : 0.25);
+//			gl.glVertex3d(variacao, 10.25, (angulo > 180 && angulo < 360) ? -0.25 : 0.25);
+//			gl.glEnd();
+//			variacao += 0.5;
+//		}
+
+		for (ElementoTetris e : elementos) {
+			e.draw(gl);
+		}
+		
+//		matrizControle.draw(gl);
+
+		TetrisPoint p = Utils.pointFromAngulo(angulo, raio);
+		cameraEye.x = p.x;
+		cameraEye.z = p.z;
+
+		gl.glLoadIdentity();
+		glu.gluLookAt(cameraEye.x, cameraEye.y, cameraEye.z, 0, cameraEye.y, 0, 0, 1, 0);
+
+		gl.glFlush();
+	}
+
+	private void drawBox() {
+		// box
+		gl.glColor3f(0.0f, 0.0f, 0.0f);
+		gl.glBegin(GL.GL_QUADS);
+		gl.glVertex3d(-2.75, -0.25, 0.25);
+		gl.glVertex3d(3.25, -0.25, 0.25);
+		gl.glVertex3d(3.25, -0.25, -0.25);
+		gl.glVertex3d(-2.75, -0.25, -0.25);
+		gl.glEnd();
+
+		gl.glBegin(GL.GL_QUADS);
+		gl.glVertex3d(-2.75, -0.25, 0.25);
+		gl.glVertex3d(-2.75, 10.25, 0.25);
+		gl.glVertex3d(-2.75, 10.25, -0.25);
+		gl.glVertex3d(-2.75, -0.25, -0.25);
+		gl.glEnd();
+
+		gl.glBegin(GL.GL_QUADS);
+		gl.glVertex3d(3.25, -0.25, 0.25);
+		gl.glVertex3d(3.25, 10.25, 0.25);
+		gl.glVertex3d(3.25, 10.25, -0.25);
+		gl.glVertex3d(3.25, -0.25, -0.25);
+		gl.glEnd();
+	}
+
+	private void drawXYZ() {
 		// eixo x
 		gl.glColor3f(1.0f, 0.0f, 0.0f);
 		gl.glBegin(GL.GL_LINES);
@@ -122,38 +199,6 @@ public class TetrisRenderer extends JPanel implements GLEventListener, KeyListen
 		gl.glVertex3d(-4.75, 0.0, 0.0);
 		gl.glVertex3d(-4.75, 0.0, 2.0);
 		gl.glEnd();
-		
-		//box
-		gl.glColor3f(0.0f, 0.0f, 0.0f);
-		gl.glLineWidth(2.0f);
-		gl.glBegin(GL.GL_LINES);
-		gl.glVertex3d(-3.75, -0.25, 0.0);
-		gl.glVertex3d(3.75, -0.25, 0.0);
-		gl.glEnd();
-		
-		gl.glBegin(GL.GL_LINES);
-		gl.glVertex3d(-3.75, -0.25, 0.0);
-		gl.glVertex3d(-3.75, 10.25, 0.0);
-		gl.glEnd();
-		
-		gl.glBegin(GL.GL_LINES);
-		gl.glVertex3d(3.75, -0.25, 0.0);
-		gl.glVertex3d(3.75, 10.25, 0.0);
-		gl.glEnd();
-		gl.glLineWidth(1.0f);
-
-		for(ElementoTetris e : elementos){
-			e.draw(gl);
-		}
-
-		TetrisPoint p = Utils.pointFromAngulo(angulo, raio);
-		cameraEye.x = p.x;
-		cameraEye.z = p.z;
-
-		gl.glLoadIdentity();
-		glu.gluLookAt(cameraEye.x, cameraEye.y, cameraEye.z, 0, 4.0, 0, 0, 1, 0);
-
-		gl.glFlush();
 	}
 
 	@Override
@@ -170,11 +215,20 @@ public class TetrisRenderer extends JPanel implements GLEventListener, KeyListen
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+		if (e.getKeyCode() == KeyEvent.VK_D) {
 			glDrawable.display();
 			return;
 		}
-		
+
+		// lado oposto da camera, inverte os comandos
+		if (angulo > 180 && angulo < 360) {
+			if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+				e.setKeyCode(KeyEvent.VK_RIGHT);
+			} else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+				e.setKeyCode(KeyEvent.VK_LEFT);
+			}
+		}
+
 		threadAnimacao.keyPressed(e);
 
 		switch (e.getKeyCode()) {
@@ -197,7 +251,6 @@ public class TetrisRenderer extends JPanel implements GLEventListener, KeyListen
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		
 		if (dragX == 0) {
 			dragX = e.getX();
 		}
@@ -246,6 +299,25 @@ public class TetrisRenderer extends JPanel implements GLEventListener, KeyListen
 	@Override
 	public void elementMoved() {
 		glDrawable.display();
+	}
+
+	@Override
+	public void generateElement() {
+		ElementoTetris e = new ElementoTetris();
+		e.setTransladeX(transX);
+		e.setTransladeY(transY);
+		Random r = new Random();
+		e.create(TipoElemento.values()[r.nextInt(TipoElemento.count.ordinal())]);
+		elementos.add(e);
+		threadAnimacao.setElemento(e);
+	}
+
+	@Override
+	public void mouseWheelMoved(MouseWheelEvent e) {
+		if (e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL) {
+			cameraEye.y += (e.getWheelRotation() * 0.1) * -1;
+			glDrawable.display();
+		}
 	}
 
 }

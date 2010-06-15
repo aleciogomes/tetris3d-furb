@@ -5,5 +5,7 @@ public enum TipoElemento {
 	barra,
 	quad,
 	raio,
-	ele
+	ele,
+	
+	count
 }

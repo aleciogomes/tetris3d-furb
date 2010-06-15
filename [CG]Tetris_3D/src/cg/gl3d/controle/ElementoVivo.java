@@ -8,12 +8,14 @@ public class ElementoVivo extends Thread {
 
 	private ElementoTetris elemento;
 	private MatrizControle matrizControle;
-	private ElementMoved listener;
+	private LogicaTetris listener;
+	private long refreshRate;
 
-	public ElementoVivo(ElementMoved listener, MatrizControle matrizControle) {
+	public ElementoVivo(LogicaTetris listener, MatrizControle matrizControle) {
 		this.elemento = null;
 		this.matrizControle = matrizControle;
 		this.listener = listener;
+		this.refreshRate = 1000;
 	}
 
 	public ElementoTetris getElemento() {
@@ -33,12 +35,17 @@ public class ElementoVivo extends Thread {
 			}
 
 			long now = System.currentTimeMillis();
-			if (now - time > 1000) {
+			if (now - time > refreshRate) {
 				// isto não é correto. O certo é se basear na matriz de controle
 				if (elemento.getTransladeY() != 1) {
 					elemento.setTransladeY(elemento.getTransladeY() - 1);
 					time = now;
 					listener.elementMoved();
+				}
+				else{
+					// reseta a taxa de atualiação
+					refreshRate = 1000;
+					listener.generateElement();
 				}
 			}
 		}
@@ -46,20 +53,20 @@ public class ElementoVivo extends Thread {
 
 	public void keyPressed(KeyEvent e) {
 		switch (e.getKeyCode()) {
-		case KeyEvent.VK_R: {
+		case KeyEvent.VK_SPACE: {
 			elemento.rotate();
 			break;
 		}
 		case KeyEvent.VK_UP: {
-			elemento.setTransladeY(elemento.getTransladeY() + 1);
+			refreshRate = 1000;
 			listener.elementMoved();
 			break;
 		}
-			// case KeyEvent.VK_DOWN:{
-			// elemento.setTransladeY(elemento.getTransladeY() - 1);
-			// listener.elementMoved();
-			// break;
-			// }
+		case KeyEvent.VK_DOWN: {
+			refreshRate = 100;
+			listener.elementMoved();
+			break;
+		}
 		case KeyEvent.VK_LEFT: {
 			elemento.setTransladeX(elemento.getTransladeX() - 1);
 			listener.elementMoved();

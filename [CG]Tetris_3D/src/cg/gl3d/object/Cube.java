@@ -79,7 +79,7 @@ public class Cube implements Object3D {
 		gl.glTranslated(translateX * sizeCube, translateY * sizeCube, translateZ * sizeCube);
 		gl.glScaled(sizeCube, sizeCube, sizeCube);
 		gl.glColor3f(0, 0, 0);
-		glut.glutWireCube(1.1f); //"borda" do cube
+		glut.glutWireCube(1.0f); //"borda" do cube
 		gl.glColor3f(red, green, blue);
 		glut.glutSolidCube(1.0f);
 		gl.glPopMatrix();

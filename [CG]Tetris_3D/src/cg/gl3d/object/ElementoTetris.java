@@ -119,6 +119,28 @@ public class ElementoTetris {
 			
 			break;
 		}
+		case raio:{
+			matriz[0][1] = 1;
+			matriz[0][2] = 1;
+			matriz[1][0] = 1;
+			matriz[1][1] = 1;
+			
+			r = 1;
+			b = 1;
+			qtdCubos = 4;
+			break;
+		}
+		case ele:{
+			matriz[0][0] = 1;
+			matriz[1][0] = 1;
+			matriz[2][0] = 1;
+			matriz[2][1] = 1;
+			
+			g = 1;
+			b = 1;
+			qtdCubos = 4;
+			break;
+		}
 		}
 		
 		for (int i = 0; i < qtdCubos; i++) {
