@@ -197,25 +197,24 @@ public class TetrisRenderer extends JPanel implements GLEventListener, KeyListen
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		if (e.getButton() == MouseEvent.BUTTON1) {
-			if (dragX == 0) {
-				dragX = e.getX();
+		
+		if (dragX == 0) {
+			dragX = e.getX();
+		}
+
+		if (dragX - e.getX() != 0) {
+			angulo += dragX - e.getX();
+			dragX = e.getX();
+
+			if (angulo > 360.0) {
+				angulo = 0;
 			}
 
-			if (dragX - e.getX() != 0) {
-				angulo += dragX - e.getX();
-				dragX = e.getX();
-
-				if (angulo > 360.0) {
-					angulo = 0;
-				}
-
-				if (angulo < 0) {
-					angulo = 360;
-				}
-
-				glDrawable.display();
+			if (angulo < 0) {
+				angulo = 360;
 			}
+
+			glDrawable.display();
 		}
 	}
 
