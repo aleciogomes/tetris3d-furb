@@ -141,10 +141,20 @@ public class ElementoTetris {
 		for (int i = 0; i < this.n; i++) {
 			for (int j = 0; j < this.n; j++) {
 				novaMatriz[i][j] = matriz[this.n - 1 - j][i];
+				
+				if (matriz[i][j])
+					matrizControle.removeCube(toPosicaoMatriz(i, j));
 			}
 		}
 		matriz = novaMatriz;
 		adjust();
+		
+		for (int i = 0; i < this.n; i++) {
+			for (int j = 0; j < this.n; j++) {
+				if (matriz[i][j])
+					matrizControle.putCube(cube, toPosicaoMatriz(i, j));
+			}
+		}
 	}
 
 	public boolean moveDown() {

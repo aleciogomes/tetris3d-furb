@@ -23,6 +23,14 @@ public class MatrizControle {
 		}
 	}
 	
+	public void removeCube(PosicaoMatriz pos) {
+		matriz[pos.row][pos.col] = null;
+	}
+	
+	public void putCube(Cube cube, PosicaoMatriz pos) {
+		matriz[pos.row][pos.col] = cube;
+	}
+	
 	public void moveCube(Cube cube, PosicaoMatriz from, PosicaoMatriz to) {
 		matriz[from.row][from.col] = null;
 		matriz[to.row][to.col] = cube;
