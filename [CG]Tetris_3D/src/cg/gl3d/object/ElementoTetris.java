@@ -204,13 +204,43 @@ public class ElementoTetris {
 	private boolean canMove(int y, int x) {
 		boolean[] tested = new boolean[n];
 
-		for (int i = n - 1; i >= 0; i--) {
-			for (int j = 0; j < this.n; j++) {
-				if (matriz[i][j] && !tested[j]) {
-					tested[j] = true;
+		if (y < 0) {
+			for (int i = n - 1; i >= 0; i--) {
+				for (int j = 0; j < n; j++) {
+					if (matriz[i][j] && !tested[j]) {
+						tested[j] = true;
 
-					if (!matrizControle.canMove(toPosicaoMatriz(i - y, j + x)))
-						return false;
+						if (!matrizControle.canMove(toPosicaoMatriz(i - y, j + x)))
+							return false;
+					}
+				}
+			}
+		}
+		if (x < 0) {
+			for (int i = 0; i < n; i++) {
+				if (!tested[i]) {
+					for (int j = 0; j < n; j++) {
+						if (matriz[i][j] && !tested[i]) {
+							tested[i] = true;
+
+							if (!matrizControle.canMove(toPosicaoMatriz(i - y, j + x)))
+								return false;
+						}
+					}
+				}
+			}
+		}
+		else if (x > 0) {
+			for (int i = 0; i < n; i++) {
+				if (!tested[i]) {
+					for (int j = n-1; j >= 0; j--) {
+						if (matriz[i][j] && !tested[i]) {
+							tested[i] = true;
+
+							if (!matrizControle.canMove(toPosicaoMatriz(i - y, j + x)))
+								return false;
+						}
+					}
 				}
 			}
 		}
