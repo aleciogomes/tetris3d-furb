@@ -7,13 +7,11 @@ import cg.gl3d.object.ElementoTetris;
 public class ElementoVivo extends Thread {
 
 	private ElementoTetris elemento;
-	private MatrizControle matrizControle;
 	private LogicaTetris listener;
 	private long refreshRate;
 
-	public ElementoVivo(LogicaTetris listener, MatrizControle matrizControle) {
+	public ElementoVivo(LogicaTetris listener) {
 		this.elemento = null;
-		this.matrizControle = matrizControle;
 		this.listener = listener;
 		this.refreshRate = 1000;
 	}
@@ -29,26 +27,25 @@ public class ElementoVivo extends Thread {
 	@Override
 	public void run() {
 		long time = 0;
+		
 		while (true) {
 			if (time == 0) {
 				time = System.currentTimeMillis();
 			}
 
 			long now = System.currentTimeMillis();
+			
 			if (now - time > refreshRate) {
-				// isto não é correto. O certo é se basear na matriz de controle
-				if (elemento.getTransladeY() != 1) {
-					elemento.setTransladeY(elemento.getTransladeY() - 1);
+				if (elemento.moveDown()) {
 					time = now;
 					listener.elementMoved();
-				}
-				else{
-					// reseta a taxa de atualiação
-					refreshRate = 1000;
+				} else {
+					refreshRate = 1000; // reseta a taxa de atualiaÁ„o
 					listener.generateElement();
 				}
 			}
 		}
+		
 	}
 
 	public void keyPressed(KeyEvent e) {

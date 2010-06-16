@@ -17,12 +17,7 @@ public class Cube implements Object3D {
 	/**
 	 * Tamanho padrão do cubo
 	 */
-	private final double sizeCube;
-
-	/**
-	 * Posição atual do cubo na matriz.
-	 */
-	private int posAtual;
+	private static final double sizeCube = 0.5d;
 	
 	private float r;
 	private float g;
@@ -33,7 +28,6 @@ public class Cube implements Object3D {
 	 */
 	public Cube() {
 		this.glut = new GLUT();
-		this.sizeCube = 0.5d;
 	}
 	
 	public void setColor(float r, float g, float b){
@@ -84,16 +78,5 @@ public class Cube implements Object3D {
 		glut.glutSolidCube(1.0f);
 		gl.glPopMatrix();
 		gl.glFlush();
-	}
-
-	/*
-	 * Método acessores
-	 */
-	public int getPosAtual() {
-		return posAtual;
-	}
-
-	public void setPosAtual(int posAtual) {
-		this.posAtual = posAtual;
 	}
 }

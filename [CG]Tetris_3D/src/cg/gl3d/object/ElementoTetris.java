@@ -1,23 +1,21 @@
 package cg.gl3d.object;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.media.opengl.GL;
+import cg.gl3d.controle.MatrizControle;
 
 public class ElementoTetris {
 
 	private final int n = 4;
-	private int matriz[][];
+	private boolean matriz[][];
 	private int transladeX;
 	private int transladeY;
-	private List<Cube> cubes;
+	private Cube cube;
+	private MatrizControle matrizControle;
 
-	public ElementoTetris() {
+	public ElementoTetris(MatrizControle matrizControle) {
+		this.matrizControle = matrizControle;
 		transladeX = 0;
 		transladeY = 0;
-		matriz = new int[this.n][this.n];
-		cubes = new ArrayList<Cube>();
+		matriz = new boolean[this.n][this.n];
 
 		clear();
 	}
@@ -25,18 +23,18 @@ public class ElementoTetris {
 	private void clear() {
 		for (int i = 0; i < this.n; i++) {
 			for (int j = 0; j < this.n; j++) {
-				matriz[i][j] = 0;
+				matriz[i][j] = false;
 			}
 		}
 	}
 
 	private void adjust() {
 		int i, j;
-		
+
 		// trata as linhas
 		for (i = 0; i < this.n; i++) {
 			for (j = 0; j < this.n; j++) {
-				if (matriz[i][j] != 0) {
+				if (matriz[i][j]) {
 					break;
 				}
 			}
@@ -44,20 +42,20 @@ public class ElementoTetris {
 			if (j == this.n) {
 				for (int a = i; a < this.n - 1; a++) {
 					for (int b = 0; b < this.n; b++) {
-						matriz[a][b] = matriz[a+1][b];
-						
-						if(a == this.n - 2){
-							matriz[a+1][b] = 0;
+						matriz[a][b] = matriz[a + 1][b];
+
+						if (a == this.n - 2) {
+							matriz[a + 1][b] = false;
 						}
 					}
 				}
 			}
 		}
-		
+
 		// trata as colunas
 		for (i = 0; i < this.n; i++) {
 			for (j = 0; j < this.n; j++) {
-				if (matriz[j][i] != 0) {
+				if (matriz[j][i]) {
 					break;
 				}
 			}
@@ -65,10 +63,10 @@ public class ElementoTetris {
 			if (j == this.n) {
 				for (int a = i; a < this.n - 1; a++) {
 					for (int b = 0; b < this.n; b++) {
-						matriz[b][a] = matriz[b][a+1];
-						
-						if (a == this.n - 2){
-							matriz[b][a+1] = 0;
+						matriz[b][a] = matriz[b][a + 1];
+
+						if (a == this.n - 2) {
+							matriz[b][a + 1] = false;
 						}
 					}
 				}
@@ -79,79 +77,67 @@ public class ElementoTetris {
 	public void create(TipoElemento tipo) {
 
 		clear();
-		
-		int qtdCubos = 0;
+
 		float r = 0;
 		float g = 0;
 		float b = 0;
 
 		switch (tipo) {
 		case te: {
-			matriz[0][0] = 1;
-			matriz[0][1] = 1;
-			matriz[0][2] = 1;
-			matriz[1][1] = 1;
-			
+			matriz[0][0] = true;
+			matriz[0][1] = true;
+			matriz[0][2] = true;
+			matriz[1][1] = true;
+
 			g = 1;
-			qtdCubos = 4;
-			
 			break;
 		}
-		case barra:{
-			matriz[0][0] = 1;
-			matriz[1][0] = 1;
-			matriz[2][0] = 1;
-			matriz[3][0] = 1;
-			
+		case barra: {
+			matriz[0][0] = true;
+			matriz[1][0] = true;
+			matriz[2][0] = true;
+			matriz[3][0] = true;
+
 			r = 1;
-			qtdCubos = 4;
-			
 			break;
 		}
-		case quad:{
-			matriz[0][0] = 1;
-			matriz[0][1] = 1;
-			matriz[1][0] = 1;
-			matriz[1][1] = 1;
-			
+		case quad: {
+			matriz[0][0] = true;
+			matriz[0][1] = true;
+			matriz[1][0] = true;
+			matriz[1][1] = true;
+
 			b = 1;
-			qtdCubos = 4;
-			
 			break;
 		}
-		case raio:{
-			matriz[0][1] = 1;
-			matriz[0][2] = 1;
-			matriz[1][0] = 1;
-			matriz[1][1] = 1;
-			
+		case raio: {
+			matriz[0][1] = true;
+			matriz[0][2] = true;
+			matriz[1][0] = true;
+			matriz[1][1] = true;
+
 			r = 1;
 			b = 1;
-			qtdCubos = 4;
 			break;
 		}
-		case ele:{
-			matriz[0][0] = 1;
-			matriz[1][0] = 1;
-			matriz[2][0] = 1;
-			matriz[2][1] = 1;
-			
+		case ele: {
+			matriz[0][0] = true;
+			matriz[1][0] = true;
+			matriz[2][0] = true;
+			matriz[2][1] = true;
+
 			g = 1;
 			b = 1;
-			qtdCubos = 4;
 			break;
 		}
 		}
-		
-		for (int i = 0; i < qtdCubos; i++) {
-			Cube c = new Cube();
-			c.setColor(r, g, b);
-			cubes.add(c);
-		}
+
+		cube = new Cube();
+		cube.setColor(r, g, b);
 	}
 
 	public void rotate() {
-		int novaMatriz[][] = new int[this.n][this.n];
+		boolean[][] novaMatriz = new boolean[this.n][this.n];
 		for (int i = 0; i < this.n; i++) {
 			for (int j = 0; j < this.n; j++) {
 				novaMatriz[i][j] = matriz[this.n - 1 - j][i];
@@ -160,16 +146,43 @@ public class ElementoTetris {
 		matriz = novaMatriz;
 		adjust();
 	}
-
-	public void draw(GL gl) {
-		int cubo = 0;
+	
+	public boolean moveDown() {
+		if (!canMove(-1, 0))
+			return false;
+		
 		for (int i = 0; i < this.n; i++) {
 			for (int j = 0; j < this.n; j++) {
-				if (matriz[i][j] == 1) {
-					cubes.get(cubo++).draw(gl, j + transladeX, (i * -1) + transladeY, 0);
+				if (matriz[i][j]) {
+					PosicaoMatriz from = toPosicaoMatriz(i, j);
+					PosicaoMatriz to = from.clone();
+					to.row--;
+					matrizControle.moveCube(cube, from, to);
 				}
 			}
 		}
+		transladeY--;
+		return true;
+	}
+	
+	private boolean canMove(int y, int x) {
+		boolean[] tested = new boolean[n];
+		
+		for (int i = n-1; i >= 0; i--) {
+				for (int j = 0; j < this.n; j++) {
+					if (matriz[i][j] && !tested[j]) {
+						tested[j] = true;
+						
+						if (!matrizControle.isEmpty(toPosicaoMatriz(i - y, j + x)))
+								return false;
+					}
+			}
+		}
+		return true;
+	}
+	
+	private PosicaoMatriz toPosicaoMatriz(int i, int j) {
+		return new PosicaoMatriz((i * -1) + transladeY, j + transladeX - MatrizControle.leftCol);
 	}
 
 	public void print() {
@@ -184,18 +197,17 @@ public class ElementoTetris {
 	public void setTransladeX(int transladeX) {
 		this.transladeX = transladeX;
 	}
-	
-	public int getTransladeX(){
+
+	public int getTransladeX() {
 		return transladeX;
 	}
 
 	public void setTransladeY(int transladeY) {
 		this.transladeY = transladeY;
 	}
-	
-	public int getTransladeY(){
+
+	public int getTransladeY() {
 		return transladeY;
 	}
-	
-	
+
 }
