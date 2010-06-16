@@ -166,8 +166,8 @@ public class ElementoTetris {
 	}
 	
 	public boolean moveLeft() {
-		//if (!canMove(0, -1))
-			//return false;
+		if (!canMove(0, -1))
+			return false;
 
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < n; j++) {
@@ -184,8 +184,8 @@ public class ElementoTetris {
 	}
 	
 	public boolean moveRight() {
-		//if (!canMove(0, 1))
-			//return false;
+		if (!canMove(0, 1))
+			return false;
 
 		for (int i = n - 1; i >= 0; i--) {
 			for (int j = n - 1; j >= 0; j--) {
