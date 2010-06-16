@@ -9,6 +9,7 @@ public class ElementoVivo extends Thread {
 	private ElementoTetris elemento;
 	private LogicaTetris listener;
 	private long refreshRate;
+	private boolean pause = false;
 
 	public ElementoVivo(LogicaTetris listener) {
 		this.elemento = null;
@@ -29,6 +30,10 @@ public class ElementoVivo extends Thread {
 		long time = 0;
 		
 		while (true) {
+			if (pause){
+				continue;
+			}
+			
 			if (time == 0) {
 				time = System.currentTimeMillis();
 			}
@@ -75,5 +80,9 @@ public class ElementoVivo extends Thread {
 			break;
 		}
 		}
+	}
+	
+	public void pause(){
+		pause = !pause;
 	}
 }

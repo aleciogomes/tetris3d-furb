@@ -46,6 +46,9 @@ public class TetrisRenderer extends JPanel implements GLEventListener, KeyListen
 	private ElementoVivo threadAnimacao;
 	private MatrizControle matrizControle;
 	private Random random;
+	
+	private boolean drawAxis = false;
+	private boolean drawGrid = true;
 
 	public TetrisRenderer() {
 		matrizControle = new MatrizControle();
@@ -105,9 +108,13 @@ public class TetrisRenderer extends JPanel implements GLEventListener, KeyListen
 	public void display(GLAutoDrawable arg0) {
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 
-		drawAxes();
+		if(drawAxis)
+			drawAxis();
+		
 		drawBox();
-		drawGrid();
+		
+		if(drawGrid)
+			drawGrid();
 		
 		matrizControle.draw(gl);
 
@@ -116,7 +123,7 @@ public class TetrisRenderer extends JPanel implements GLEventListener, KeyListen
 		gl.glFlush();
 	}
 
-	private void drawAxes() {
+	private void drawAxis() {
 		// eixo x
 		gl.glColor3f(1.0f, 0.0f, 0.0f);
 		gl.glBegin(GL.GL_LINES);
@@ -229,8 +236,16 @@ public class TetrisRenderer extends JPanel implements GLEventListener, KeyListen
 		threadAnimacao.keyPressed(e);
 
 		switch (e.getKeyCode()) {
-		case KeyEvent.VK_B: {
-			transY--;
+		case KeyEvent.VK_P: {
+			threadAnimacao.pause();
+			break;
+		}
+		case KeyEvent.VK_A:{
+			drawAxis = !drawAxis;
+			break;
+		}
+		case KeyEvent.VK_G:{
+			drawGrid = !drawGrid;
 			break;
 		}
 		}
