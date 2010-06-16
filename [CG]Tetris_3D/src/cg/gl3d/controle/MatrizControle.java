@@ -28,7 +28,7 @@ public class MatrizControle {
 		matriz[to.row][to.col] = cube;
 	}
 	
-	public boolean isEmpty(PosicaoMatriz pos) {
+	public boolean canMove(PosicaoMatriz pos) {
 		if (pos.row < 0 || pos.row >= rowCount || pos.col < 0 || pos.col >= colCount)
 			return false;
 		

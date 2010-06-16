@@ -65,12 +65,12 @@ public class ElementoVivo extends Thread {
 			break;
 		}
 		case KeyEvent.VK_LEFT: {
-			elemento.setTransladeX(elemento.getTransladeX() - 1);
+			elemento.moveLeft();
 			listener.elementMoved();
 			break;
 		}
 		case KeyEvent.VK_RIGHT: {
-			elemento.setTransladeX(elemento.getTransladeX() + 1);
+			elemento.moveRight();
 			listener.elementMoved();
 			break;
 		}

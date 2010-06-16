@@ -146,13 +146,13 @@ public class ElementoTetris {
 		matriz = novaMatriz;
 		adjust();
 	}
-	
+
 	public boolean moveDown() {
 		if (!canMove(-1, 0))
 			return false;
-		
-		for (int i = 0; i < this.n; i++) {
-			for (int j = 0; j < this.n; j++) {
+
+		for (int i = n - 1; i >= 0; i--) {
+			for (int j = n - 1; j >= 0; j--) {
 				if (matriz[i][j]) {
 					PosicaoMatriz from = toPosicaoMatriz(i, j);
 					PosicaoMatriz to = from.clone();
@@ -165,22 +165,58 @@ public class ElementoTetris {
 		return true;
 	}
 	
+	public boolean moveLeft() {
+		//if (!canMove(0, -1))
+			//return false;
+
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				if (matriz[i][j]) {
+					PosicaoMatriz from = toPosicaoMatriz(i, j);
+					PosicaoMatriz to = from.clone();
+					to.col--;
+					matrizControle.moveCube(cube, from, to);
+				}
+			}
+		}
+		transladeX--;
+		return true;
+	}
+	
+	public boolean moveRight() {
+		//if (!canMove(0, 1))
+			//return false;
+
+		for (int i = n - 1; i >= 0; i--) {
+			for (int j = n - 1; j >= 0; j--) {
+				if (matriz[i][j]) {
+					PosicaoMatriz from = toPosicaoMatriz(i, j);
+					PosicaoMatriz to = from.clone();
+					to.col++;
+					matrizControle.moveCube(cube, from, to);
+				}
+			}
+		}
+		transladeX++;
+		return true;
+	}
+
 	private boolean canMove(int y, int x) {
 		boolean[] tested = new boolean[n];
-		
-		for (int i = n-1; i >= 0; i--) {
-				for (int j = 0; j < this.n; j++) {
-					if (matriz[i][j] && !tested[j]) {
-						tested[j] = true;
-						
-						if (!matrizControle.isEmpty(toPosicaoMatriz(i - y, j + x)))
-								return false;
-					}
+
+		for (int i = n - 1; i >= 0; i--) {
+			for (int j = 0; j < this.n; j++) {
+				if (matriz[i][j] && !tested[j]) {
+					tested[j] = true;
+
+					if (!matrizControle.canMove(toPosicaoMatriz(i - y, j + x)))
+						return false;
+				}
 			}
 		}
 		return true;
 	}
-	
+
 	private PosicaoMatriz toPosicaoMatriz(int i, int j) {
 		return new PosicaoMatriz((i * -1) + transladeY, j + transladeX - MatrizControle.leftCol);
 	}
